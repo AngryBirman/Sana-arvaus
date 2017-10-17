@@ -1,7 +1,7 @@
 import java.util.Arrays;
 import java.util.Scanner;
 
-
+ // this is test commit to git lets see if anything changes. Hope this works.
 public class Main {
 	
 	private static final Scanner scanner = new Scanner(System.in);
