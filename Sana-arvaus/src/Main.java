@@ -4,39 +4,39 @@ import java.util.Scanner;
 
 public class Main {
 	
-	private static final Scanner lukija = new Scanner(System.in);
+	private static final Scanner scanner = new Scanner(System.in);
 	
-	static String HiddenWord = "koira"; //TODO optio useammalle sanalle
-	static boolean peliOhi = false; // tämä vain auttaa pelin resetoimisessa
+	static String HiddenWord = "koira"; //TODO option for more words
+	static boolean GameIsOver = false; // helps to reset the game
 
 	public static void main(String[] args) 
 	{
 		do{
-		System.out.println("Tervetuloa sana-arvaus peliin!"); // intro do while jotta voi pelata uudelleen
+		System.out.println("Tervetuloa sana-arvaus peliin!"); // re-playable intro
 		System.out.println("Osaatko arvata 5 kirjaimisen sanan?");
 		int CurrentTry = 5;	
-		kysyVastaus(CurrentTry);
-		}while(uudestaanko() == true);
+		AskForAnswer(CurrentTry);
+		}while(PlayAgainOrNot() == true);
 	}
 		
 	
 	
-	/// Kysytään vastausta ja näytetään pelitilanne
-	public static void kysyVastaus(int CurrentTry)
+	/// Ask user for input and check its validity
+	public static void AskForAnswer(int CurrentTry)
 	{
 		
-		if(CurrentTry == 0){peliHävitty();} // tarkistaa jatkuuko peli yritysten määrästä
+		if(CurrentTry == 0){GameLost();} // check current tries to see if we can still play
 		else if(CurrentTry > 0 )
 		{
 			System.out.println("Yrityksiä jäljellä: " + CurrentTry);
 			System.out.println("Arvaa sana: "); // kysytään arvaus
-			String vastaus = lukija.next();
+			String vastaus = scanner.next();
 			CurrentTry = CurrentTry - 1;
 			if(vastaus.matches(HiddenWord))
 			{
-				peliOhi();
+				GameOver();
 			}
-			TarkistaVastaus(vastaus, CurrentTry);
+			CheckAnswer(vastaus, CurrentTry);
 		}
 	
 	}
@@ -45,8 +45,8 @@ public class Main {
 	
 	public static void TarkistaVastaus(String vastaus, int CurrentTry)
 	{
-		boolean testi = false; // debuggaus työkalu outoon bugiin
-		if(peliOhi ==false) // jos peli onjo päättynyt ei tarvitse tarkistaa
+		boolean testi = false; // for debugging a weird bug more info from laatikainen
+		if(GameIsOver ==false) // if the game is already over no need to check the answer
 		{
 		
 		if(vastaus.length() < 5 )
@@ -54,7 +54,7 @@ public class Main {
 			System.out.println("Vastauksesi on liian lyhyt!");
 			CurrentTry = CurrentTry + 1;
 			testi =true;
-			kysyVastaus(CurrentTry);
+			AskForAnswer(CurrentTry);
 		}
 		
 		if(vastaus.length() > 5 )
@@ -62,7 +62,7 @@ public class Main {
 			System.out.println("Vastauksesi on liian pitkä!");
 			CurrentTry = CurrentTry + 1;
 			testi = true;
-			kysyVastaus(CurrentTry);
+			AskForAnswer(CurrentTry);
 		}
 		
 		
@@ -71,26 +71,26 @@ public class Main {
 			{
 				System.out.println("Käytä vain pieniä kirjaimia!");
 				CurrentTry = CurrentTry + 1;
-				kysyVastaus(CurrentTry);
+				AskForAnswer(CurrentTry);
 		
 			}
 			
-		if(onkoIsogrammi(vastaus)==true & testi == false)
+		if(IsIsogram(vastaus)==true & testi == false)
 			{
 				System.out.println("Sanasi ei ole isogrammi!");
 				CurrentTry = CurrentTry + 1;
-				kysyVastaus(CurrentTry);
+				AskForAnswer(CurrentTry);
 			}
-		if(peliOhi == false)
-		TarkistaOsumat(vastaus, CurrentTry);
+		if(GameIsOver == false)
+		CheckAnswer(vastaus, CurrentTry);
 		
 		}
 	}
 	
 	
 	
-	// tarkistetaan onko sana isogrammi eli esiintyykö siinä sama kirjain useammin kuin kerran
-	static boolean onkoIsogrammi(String vastaus)
+	// checks whether the word is isogram
+	static boolean IsIsogram(String vastaus)
     {
         // Convert the string in lower case letters
         vastaus = vastaus.toLowerCase();
@@ -107,7 +107,7 @@ public class Main {
         return false;
 	}
 	
-	public static void TarkistaOsumat(String vastaus,int CurrentTry)
+	public static void CheckAnswer(String vastaus,int CurrentTry)
 	{
 			    
 			int bulls=0;
@@ -117,11 +117,11 @@ public class Main {
 		    int[] arr2 = new int[100];
 		 
 		 
-		    for(int i=0; i<HiddenWord.length(); i++){ // verrataan sanoja
+		    for(int i=0; i<HiddenWord.length(); i++){ // comparing letters
 		        char hwChar = HiddenWord.charAt(i); 
 		        char guessChar = vastaus.charAt(i);
 		        
-		        if(hwChar==guessChar)//jos ovat samat se on bull!
+		        if(hwChar==guessChar)//if they match at the same place it's a bull!
 		            bulls++;
 		        else{
 		            arr1[hwChar-'0']++;
@@ -129,20 +129,20 @@ public class Main {
 		        }    
 		    }
 		 
-		    for(int i=0; i<100; i++){ // lasketaan cowsit
+		    for(int i=0; i<100; i++){ // counting the cows
 		        cows += Math.min(arr1[i], arr2[i]);
 		       
 		    }
-		    TulostaVihje(bulls, cows, vastaus, CurrentTry);
+		    ShowHint(bulls, cows, vastaus, CurrentTry);
 		}
 	
-	public static void peliOhi()
+	public static void GameOver()
 	{	
 		System.out.println("Hienoa voitit pelin!");
-		peliOhi = true;	
+		GameIsOver = true;	
 	}
 	
-	public static void peliHävitty()
+	public static void GameLost()
 	{
 		System.out.println("Et voittanut tällä kertaa. Parempi onni ensi kerralla! jouu");
 		//System.exit(0);
@@ -150,25 +150,25 @@ public class Main {
 	
 		
 		
-	/// Tämä metodi vain tulostaa pelaajalle vihjeet
-	public static void TulostaVihje(int bulls, int cows, String vastaus, int CurrentTry)
+	/// Prints to player whether they had bulls or cows in their answer
+	public static void ShowHint(int bulls, int cows, String vastaus, int CurrentTry)
 	{
 		System.out.println("Bulls: " + bulls + " Cows: "+ cows);
-		kysyVastaus(CurrentTry);
+		AskForAnswer(CurrentTry);
 	}
 	
-	/// kysytään haluako pelaaja pelata uudelleen ja palautetaan tulos while- loopille
-	public static boolean uudestaanko() {
+	/// Ask to play again and return the answer back to do while loop
+	public static boolean PlayAgainOrNot() {
 
 		System.out.println(" \n Haluatko pelata uudelleen? y/n ");
-		String vastaus = lukija.next();
+		String vastaus = scanner.next();
 		if (vastaus.matches("n")) {
 			System.out.println("Nähdään taas!");
 			System.exit(0);
 			return false;
 		} else if (vastaus.matches("y")) 
 		{
-			peliOhi =false;
+			GameIsOver =false;
 			return true;
 		}
 		return true;
