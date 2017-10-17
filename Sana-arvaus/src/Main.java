@@ -29,27 +29,27 @@ public class Main {
 		else if(CurrentTry > 0 )
 		{
 			System.out.println("Yrityksi‰ j‰ljell‰: " + CurrentTry);
-			System.out.println("Arvaa sana: "); // kysyt‰‰n arvaus
-			String vastaus = scanner.next();
+			System.out.println("Arvaa sana: "); // ask for a guess
+			String answer = scanner.next();
 			CurrentTry = CurrentTry - 1;
-			if(vastaus.matches(HiddenWord))
+			if(answer.matches(HiddenWord))
 			{
 				GameOver();
 			}
-			CheckAnswer(vastaus, CurrentTry);
+			CheckAnswerValidity(answer, CurrentTry);
 		}
 	
 	}
 		
 	
 	
-	public static void TarkistaVastaus(String vastaus, int CurrentTry)
+	public static void CheckAnswerValidity(String answer, int CurrentTry)
 	{
 		boolean testi = false; // for debugging a weird bug more info from laatikainen
 		if(GameIsOver ==false) // if the game is already over no need to check the answer
 		{
 		
-		if(vastaus.length() < 5 )
+		if(answer.length() < 5 )
 		{
 			System.out.println("Vastauksesi on liian lyhyt!");
 			CurrentTry = CurrentTry + 1;
@@ -57,7 +57,7 @@ public class Main {
 			AskForAnswer(CurrentTry);
 		}
 		
-		if(vastaus.length() > 5 )
+		if(answer.length() > 5 )
 		{
 			System.out.println("Vastauksesi on liian pitk‰!");
 			CurrentTry = CurrentTry + 1;
@@ -67,7 +67,7 @@ public class Main {
 		
 		
 			
-		if (vastaus.matches(".*[A-Z].*"))
+		if (answer.matches(".*[A-Z].*"))
 			{
 				System.out.println("K‰yt‰ vain pieni‰ kirjaimia!");
 				CurrentTry = CurrentTry + 1;
@@ -75,14 +75,14 @@ public class Main {
 		
 			}
 			
-		if(IsIsogram(vastaus)==true & testi == false)
+		if(IsIsogram(answer)==true & testi == false)
 			{
 				System.out.println("Sanasi ei ole isogrammi!");
 				CurrentTry = CurrentTry + 1;
 				AskForAnswer(CurrentTry);
 			}
-		if(GameIsOver == false)
-		CheckAnswer(vastaus, CurrentTry);
+		if(GameIsOver == false) // No need to spam the hint if the game is already over
+		CheckAnswer(answer, CurrentTry);
 		
 		}
 	}
@@ -90,13 +90,13 @@ public class Main {
 	
 	
 	// checks whether the word is isogram
-	static boolean IsIsogram(String vastaus)
+	static boolean IsIsogram(String answer)
     {
         // Convert the string in lower case letters
-        vastaus = vastaus.toLowerCase();
-        int len = vastaus.length();
+        answer = answer.toLowerCase();
+        int len = answer.length();
         
-        char arr[] = vastaus.toCharArray();
+        char arr[] = answer.toCharArray();
         
         Arrays.sort(arr);
         for(int i = 0;i < len-1;i++)
@@ -107,7 +107,7 @@ public class Main {
         return false;
 	}
 	
-	public static void CheckAnswer(String vastaus,int CurrentTry)
+	public static void CheckAnswer(String answer,int CurrentTry)
 	{
 			    
 			int bulls=0;
@@ -119,7 +119,7 @@ public class Main {
 		 
 		    for(int i=0; i<HiddenWord.length(); i++){ // comparing letters
 		        char hwChar = HiddenWord.charAt(i); 
-		        char guessChar = vastaus.charAt(i);
+		        char guessChar = answer.charAt(i);
 		        
 		        if(hwChar==guessChar)//if they match at the same place it's a bull!
 		            bulls++;
@@ -133,7 +133,8 @@ public class Main {
 		        cows += Math.min(arr1[i], arr2[i]);
 		       
 		    }
-		    ShowHint(bulls, cows, vastaus, CurrentTry);
+		    if(GameIsOver == false)
+		    ShowHint(bulls, cows, answer, CurrentTry);
 		}
 	
 	public static void GameOver()
@@ -151,7 +152,7 @@ public class Main {
 		
 		
 	/// Prints to player whether they had bulls or cows in their answer
-	public static void ShowHint(int bulls, int cows, String vastaus, int CurrentTry)
+	public static void ShowHint(int bulls, int cows, String answer, int CurrentTry)
 	{
 		System.out.println("Bulls: " + bulls + " Cows: "+ cows);
 		AskForAnswer(CurrentTry);
@@ -161,12 +162,12 @@ public class Main {
 	public static boolean PlayAgainOrNot() {
 
 		System.out.println(" \n Haluatko pelata uudelleen? y/n ");
-		String vastaus = scanner.next();
-		if (vastaus.matches("n")) {
+		String answer = scanner.next();
+		if (answer.matches("n")) {
 			System.out.println("N‰hd‰‰n taas!");
 			System.exit(0);
 			return false;
-		} else if (vastaus.matches("y")) 
+		} else if (answer.matches("y")) 
 		{
 			GameIsOver =false;
 			return true;
