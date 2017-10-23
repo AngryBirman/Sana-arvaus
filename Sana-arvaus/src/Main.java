@@ -1,5 +1,6 @@
 import java.util.Arrays;
 import java.util.Scanner;
+import java.io.*;
 
  // this is test commit to git lets see if anything changes. Hope this works.
 public class Main {
@@ -7,19 +8,37 @@ public class Main {
 	private static final Scanner scanner = new Scanner(System.in);
 	
 	static String HiddenWord = "koira"; //TODO option for more words
+	static String Name; // name of the player
+	static String Score; // global score of the player
+	static int Position = 0; // position in the leaderboard
 	static boolean GameIsOver = false; // helps to reset the game
-
-	public static void main(String[] args) 
+	
+	
+	public static void main(String[] args) throws IOException 
 	{
+		
 		do{
 		System.out.println("Tervetuloa sana-arvaus peliin!"); // re-playable intro
+		System.out.println("Syötä nimesi:");
+		Name = scanner.nextLine();
+		System.out.println("Tervetuloa: " + Name + "!");
 		System.out.println("Osaatko arvata 5 kirjaimisen sanan?");
 		int CurrentTry = 5;	
 		AskForAnswer(CurrentTry);
 		}while(PlayAgainOrNot() == true);
+		FullLeaderBoard();
 	}
 		
-	
+	public static void FullLeaderBoard() throws IOException {
+		try {
+		final PrintWriter writer = new PrintWriter(new FileWriter("leaderboardfull.txt", true));
+		writer.println(" Sijoitus " + Position + " Nimi: " + Name + " Pisteet " + Score);
+		writer.close();
+		}  catch (IOException e) {
+			System.out.println("Ohjelmassa tapahtui virhe.");
+            e.printStackTrace();
+        }
+	}
 	
 	/// Ask user for input and check its validity
 	public static void AskForAnswer(int CurrentTry)
