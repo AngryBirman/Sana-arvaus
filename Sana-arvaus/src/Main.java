@@ -98,6 +98,7 @@ public class Main {
 		} // check current tries to see if we can still play
 		else if (CurrentTry > 0) {
 			System.out.println("Yrityksiä jäljellä: " + CurrentTry);
+			System.out.println("Pisteet: " + Score);
 			System.out.println("Arvaa sana: "); // ask for a guess
 			String answer = scanner.next();
 			CurrentTry = CurrentTry - 1;
@@ -119,6 +120,7 @@ public class Main {
 			if (answer.length() < 5) {
 				System.out.println("Vastauksesi on liian lyhyt!");
 				CurrentTry = CurrentTry + 1;
+				Score -= 5;
 				testi = true;
 				AskForAnswer(CurrentTry);
 			}
@@ -126,6 +128,7 @@ public class Main {
 			if (answer.length() > 5) {
 				System.out.println("Vastauksesi on liian pitkä!");
 				CurrentTry = CurrentTry + 1;
+				Score -= 5;
 				testi = true;
 				AskForAnswer(CurrentTry);
 			}
@@ -133,6 +136,7 @@ public class Main {
 			if (answer.matches(".*[A-Z].*")) {
 				System.out.println("Käytä vain pieniä kirjaimia!");
 				CurrentTry = CurrentTry + 1;
+				Score -= 5;
 				AskForAnswer(CurrentTry);
 
 			}
@@ -140,6 +144,7 @@ public class Main {
 			if (IsIsogram(answer) == true & testi == false) {
 				System.out.println("Sanasi ei ole isogrammi!");
 				CurrentTry = CurrentTry + 1;
+				Score -= 5;
 				AskForAnswer(CurrentTry);
 			}
 			if (GameIsOver == false) // No need to spam the hint if the game is already over										
@@ -175,25 +180,34 @@ public class Main {
 			char hwChar = HiddenWord.charAt(i);
 			char guessChar = answer.charAt(i);
 
-			if (hwChar == guessChar)// if they match at the same place it's a bull!
-									
-				bulls++;
+			if (hwChar == guessChar)// if they match at the same place it's a bull!		
+				bulls++; 
+			
 			else {
 				arr1[hwChar - '0']++;
 				arr2[guessChar - '0']++;
+				
 			}
 		}
+		Score += bulls * 5;
 
 		for (int i = 0; i < 100; i++) { // counting the cows
 			cows += Math.min(arr1[i], arr2[i]);
-
 		}
+		Score += cows * 3;
+		
+		if(bulls == 0 && cows == 0) {
+			Score -= 10;
+		}
+		
 		if (GameIsOver == false)
 			ShowHint(bulls, cows, answer, CurrentTry);
 	}
 
 	public static void GameOver() {
 		System.out.println("Hienoa voitit pelin!");
+		Score += 100;
+		System.out.println("Pisteet: " + Score);
 		GameIsOver = true;
 	}
 
