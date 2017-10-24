@@ -11,11 +11,12 @@ public class Main {
 	static String Name = ""; // name of the player
 	static int Score = 0; // global score of the player
 	static boolean GameIsOver = false; // helps to reset the game
-
+	
 	public static void main(String[] args) throws IOException {
 
 		do {
 			System.out.println("Tervetuloa sana-arvaus peliin!"); // re-playable intro
+			Score = 0;
 			System.out.println("Syötä nimesi:");
 			Name = namescanner.nextLine();
 			System.out.println("Tervetuloa: " + Name + "!");
@@ -46,11 +47,11 @@ public class Main {
 		public static void PrintFullLeaderBoard() {
 
 			try {
-				final Scanner reader = new Scanner(new FileReader("leaderboardfull.txt"));
+				final Scanner reader = new Scanner(new FileReader("leaderboardfull.txt"));		
 				while (reader.hasNext()) {
 					String line = reader.nextLine();
 					System.out.println(line);
-				}
+				}				
 				reader.close();
 			} catch (FileNotFoundException e) {
 				// error log
@@ -71,7 +72,7 @@ public class Main {
 			e.printStackTrace();
 		}
 	}
-	
+	 // print top 5 in the leaderboard
 	public static void PrintTop5LeaderBoard() {
 
 		try {
