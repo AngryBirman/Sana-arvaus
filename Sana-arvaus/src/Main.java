@@ -1,4 +1,5 @@
 import java.util.Arrays;
+import java.util.Random;
 import java.util.Scanner;
 import java.io.*;
 
@@ -7,7 +8,7 @@ public class Main {
 	private static final Scanner scanner = new Scanner(System.in);
 	private static final Scanner namescanner = new Scanner(System.in);
 	
-	static String HiddenWord = "koira"; // TODO option for more words
+	static String HiddenWord = ""; // Initializing empty string
 	static String Name = ""; // name of the player
 	static int Score = 0; // global score of the player
 	static boolean GameIsOver = false; // helps to reset the game
@@ -15,6 +16,7 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 
 		do {
+			GetRandomHiddenWord();
 			System.out.println("Tervetuloa sana-arvaus peliin!"); // re-playable intro
 			Score = 0;
 			System.out.println("Syötä nimesi:");
@@ -238,5 +240,15 @@ public class Main {
 			return true;
 		}
 		return true;
+	}
+	
+	public static void GetRandomHiddenWord() 
+	{
+		String[] HiddenWords = { "koira", "torni", "marsu", "vuohi" };
+		
+		Random RandomHiddenWord = new Random();
+		int index = RandomHiddenWord.nextInt(HiddenWords.length);
+		HiddenWord = HiddenWords[index];	
+		System.out.println("Sana ladattu.");
 	}
 }
