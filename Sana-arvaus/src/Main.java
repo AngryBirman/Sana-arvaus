@@ -1,4 +1,8 @@
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
 import java.io.*;
 
@@ -13,7 +17,7 @@ public class Main {
 	static boolean GameIsOver = false; // helps to reset the game
 	
 	public static void main(String[] args) throws IOException {
-
+		List<Player> list = new ArrayList<Player>();
 		do {
 			System.out.println("Tervetuloa sana-arvaus peliin!"); // re-playable intro
 			Score = 0;
@@ -23,9 +27,43 @@ public class Main {
 			System.out.println("Osaatko arvata 5 kirjaimisen sanan?");
 			int CurrentTry = 5;
 			AskForAnswer(CurrentTry);
+			Player p1 = new Player(Score, Name);
+			list.add(p1);
+			Collections.sort(list, new PlayerComparatorByRating());
+			System.out.println(list);
 		} while (PlayAgainOrNot() == true);
-		FullLeaderBoard();
-		AskLeaderBoard();
+		//FullLeaderBoard();
+		//AskLeaderBoard();
+	}
+	
+	static class Player {
+	    private int rating;
+	    private final String name;
+
+	    Player(int rating, String name) {
+	        this.rating = rating;
+	        this.name = name;
+	    }
+
+	    public int getRating() {
+	        return rating;
+	    }
+
+	    public String getName() {
+	        return name;
+	    }
+
+	    @Override
+	    public String toString() {
+	        return String.format("%s:%d", name, rating);
+	    }
+	}
+	
+	static class PlayerComparatorByRating implements Comparator<Player> {
+	    @Override
+	    public int compare(Player o1, Player o2) {
+	        return o2.getRating() - o1.getRating();
+	    }
 	}
 	
 	// ask user to load the leaderboard
@@ -45,12 +83,12 @@ public class Main {
 		
 		// print the full leaderboard
 		public static void PrintFullLeaderBoard() {
-
 			try {
 				final Scanner reader = new Scanner(new FileReader("leaderboardfull.txt"));		
 				while (reader.hasNext()) {
 					String line = reader.nextLine();
 					System.out.println(line);
+					
 				}				
 				reader.close();
 			} catch (FileNotFoundException e) {
