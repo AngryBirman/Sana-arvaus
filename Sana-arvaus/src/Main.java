@@ -17,16 +17,16 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 
 		do {
-			GetRandomHiddenWord();
+			int CurrentTry = 5;
+			ResetGame();
+			
 			System.out.println("Tervetuloa sana-arvaus peliin!"); // re-playable intro
 			Score = 0;
-			System.out.println("Ole hyvä ja valitse vaikeustasosi." +  "\n 1: helppo \n 2: keskitaso \n 3: vaikea");
-			Difficulty = scanner.nextInt();
+			ChooseDifficulty();
 			System.out.println("Syötä nimesi:");
 			Name = namescanner.nextLine();
 			System.out.println("Tervetuloa: " + Name + "!");
 			System.out.println("Osaatko arvata 5 kirjaimisen sanan?");
-			int CurrentTry = 5;
 			
 			if(Difficulty == 1) {CurrentTry = 10;} // giving tries based on the chosen difficulty
 			else if(Difficulty == 2) {CurrentTry = 5;}
@@ -101,7 +101,7 @@ public class Main {
 	}
 
 	// Ask user for input and check its validity
-	public static void AskForAnswer(int CurrentTry) {
+	public static void AskForAnswer(int CurrentTry) throws IOException {
 
 		if (CurrentTry == 0) {
 			GameLost();
@@ -120,9 +120,10 @@ public class Main {
 
 	}
 
-	public static void CheckAnswerValidity(String answer, int CurrentTry) {
+	public static void CheckAnswerValidity(String answer, int CurrentTry) throws IOException {
 		boolean testi = false; // for debugging a weird bug more info from laatikainen
 								
+		
 		if (GameIsOver == false) // if the game is already over no need to check  the answer
 									
 		{
@@ -178,40 +179,44 @@ public class Main {
 		return false;
 	}
 
-	public static void CheckAnswer(String answer, int CurrentTry) {
+	public static void CheckAnswer(String answer, int CurrentTry) throws IOException {
 
-		int bulls = 0;
-		int cows = 0;
-
-		int[] arr1 = new int[100];
-		int[] arr2 = new int[100];
-
-		for (int i = 0; i < HiddenWord.length(); i++) { // comparing letters
-			char hwChar = HiddenWord.charAt(i);
-			char guessChar = answer.charAt(i);
-
-			if (hwChar == guessChar)// if they match at the same place it's a bull!		
-				bulls++; 
-			
-			else {
-				arr1[hwChar - '0']++;
-				arr2[guessChar - '0']++;
+		if (CurrentTry > 0) 
+		{
+			int bulls = 0;
+			int cows = 0;
+	
+			int[] arr1 = new int[100];
+			int[] arr2 = new int[100];
+	
+			for (int i = 0; i < HiddenWord.length(); i++) { // comparing letters
+				char hwChar = HiddenWord.charAt(i);
+				char guessChar = answer.charAt(i);
+	
+				if (hwChar == guessChar)// if they match at the same place it's a bull!		
+					bulls++; 
 				
+				else {
+					arr1[hwChar - '0']++;
+					arr2[guessChar - '0']++;
+					
+				}
 			}
+			Score += bulls * 5;
+	
+			for (int i = 0; i < 100; i++) { // counting the cows
+				cows += Math.min(arr1[i], arr2[i]);
+			}
+			Score += cows * 3;
+			
+			if(bulls == 0 && cows == 0) {
+				Score -= 10;
+			}
+			
+			if (GameIsOver == false)
+				ShowHint(bulls, cows, answer, CurrentTry);
 		}
-		Score += bulls * 5;
-
-		for (int i = 0; i < 100; i++) { // counting the cows
-			cows += Math.min(arr1[i], arr2[i]);
-		}
-		Score += cows * 3;
-		
-		if(bulls == 0 && cows == 0) {
-			Score -= 10;
-		}
-		
-		if (GameIsOver == false)
-			ShowHint(bulls, cows, answer, CurrentTry);
+		else {GameLost();}
 	}
 
 	public static void GameOver() {
@@ -221,15 +226,20 @@ public class Main {
 		GameIsOver = true;
 	}
 
-	public static void GameLost() {
+	public static void GameLost() throws IOException {
 		System.out.println("Et voittanut tällä kertaa. Parempi onni ensi kerralla!");
+		PlayAgainOrNot();
 		// System.exit(0);
 	}
 
 	/// Prints to player whether they had bulls or cows in their answer
-	public static void ShowHint(int bulls, int cows, String answer, int CurrentTry) {
-		System.out.println("Bulls: " + bulls + " Cows: " + cows);
-		AskForAnswer(CurrentTry);
+	public static void ShowHint(int bulls, int cows, String answer, int CurrentTry) throws IOException 
+	{
+		if(CurrentTry > 0) 
+		{
+			System.out.println("Bulls: " + bulls + " Cows: " + cows);
+			AskForAnswer(CurrentTry);
+		}
 	}
 
 	/// Ask to play again and return the answer back to do while loop
@@ -239,11 +249,12 @@ public class Main {
 		String answer = scanner.next();
 		if (answer.matches("n")) {
 			System.out.println("Nähdään taas!");
-			// System.exit(0);
+			System.exit(0);
 			return false;
 		} else if (answer.matches("y")) {
 			FullLeaderBoard();
-			GameIsOver = false;
+			main(null);
+			//GameIsOver = false;
 			return true;
 		}
 		return true;
@@ -257,5 +268,28 @@ public class Main {
 		int index = RandomHiddenWord.nextInt(HiddenWords.length);
 		HiddenWord = HiddenWords[index];	
 		System.out.println("Sana ladattu.");
+	}
+	
+	public static void ResetGame() 
+	{
+		GetRandomHiddenWord();
+		GameIsOver = false;
+		
+	}
+	
+	public static void ChooseDifficulty() 
+	{
+		//Difficulty = 0;
+		System.out.println("Ole hyvä ja valitse vaikeustasosi." +  "\n 1: helppo \n 2: keskitaso \n 3: vaikea");
+		
+		try {
+			Difficulty = scanner.nextInt();
+		}
+		catch(Exception e) 
+		{
+			System.out.println("Anna vaikeustasosi muodossa 1,2 tai 3");
+			
+		}
+		
 	}
 }
