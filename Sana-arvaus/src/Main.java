@@ -12,6 +12,7 @@ public class Main {
 	static String Name = ""; // name of the player
 	static int Score = 0; // global score of the player
 	static boolean GameIsOver = false; // helps to reset the game
+	static int Difficulty;
 	
 	public static void main(String[] args) throws IOException {
 
@@ -19,11 +20,17 @@ public class Main {
 			GetRandomHiddenWord();
 			System.out.println("Tervetuloa sana-arvaus peliin!"); // re-playable intro
 			Score = 0;
+			System.out.println("Ole hyvä ja valitse vaikeustasosi." +  "\n 1: helppo \n 2: keskitaso \n 3: vaikea");
+			Difficulty = scanner.nextInt();
 			System.out.println("Syötä nimesi:");
 			Name = namescanner.nextLine();
 			System.out.println("Tervetuloa: " + Name + "!");
 			System.out.println("Osaatko arvata 5 kirjaimisen sanan?");
 			int CurrentTry = 5;
+			
+			if(Difficulty == 1) {CurrentTry = 10;} // giving tries based on the chosen difficulty
+			else if(Difficulty == 2) {CurrentTry = 5;}
+			else {CurrentTry = 3;}
 			AskForAnswer(CurrentTry);
 		} while (PlayAgainOrNot() == true);
 		FullLeaderBoard();
@@ -215,7 +222,7 @@ public class Main {
 	}
 
 	public static void GameLost() {
-		System.out.println("Et voittanut tällä kertaa. Parempi onni ensi kerralla! jouu");
+		System.out.println("Et voittanut tällä kertaa. Parempi onni ensi kerralla!");
 		// System.exit(0);
 	}
 
