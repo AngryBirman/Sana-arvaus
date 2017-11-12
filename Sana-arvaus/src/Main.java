@@ -1,7 +1,20 @@
 import java.util.Arrays;
-import java.util.Random;
-import java.util.Scanner;
-import java.io.*;
+
+/**
+* Word-guessing game
+* <p>
+* This game asks the player for the words to guess. Depending on the difficulty the player has certain ammount of tries
+* to get the word(s) correct. After a game the player can view their placement on the leaderboards
+* <p>
+* 
+*
+* 
+* @author Antti Leskinen 
+* @author Antti Laatikainen
+* @author Aarni Roininen
+* @author Markus Wallin
+* @version r1.0.1
+*/
 
 public class Main {
 
@@ -13,6 +26,10 @@ public class Main {
 	static int Score = 0; // global score of the player
 	static boolean GameIsOver = false; // helps to reset the game
 	static int Difficulty;
+	
+	/**
+	 * 
+	 */
 	
 	public static void main(String[] args) throws IOException {
 
@@ -37,6 +54,10 @@ public class Main {
 		AskLeaderBoard();
 	}
 	
+	/**
+	 * @param AskKeaderBoard() asks user to load the leaderboard
+	 * @throws IOException gives an error message to the developer if soemthing went wrong
+	 */
 	// ask user to load the leaderboard
 		public static void AskLeaderBoard() throws IOException {
 
@@ -51,7 +72,10 @@ public class Main {
 				PrintTop5LeaderBoard();
 			}
 		}
-		
+		/**
+		 * @param PrintFullleaderBoard prints the leaderboard
+		 * 
+		 */
 		// print the full leaderboard
 		public static void PrintFullLeaderBoard() {
 
@@ -68,7 +92,10 @@ public class Main {
 				e.printStackTrace();
 			}
 		}
-
+		/**
+		 * @param FullleaderBoard creates the leaderboard
+		 * @throws IOException gives an error message to the developer if soemthing went wrong 
+		 */
 		// create and write the full leaderboard
 	public static void FullLeaderBoard() throws IOException {
 		try {
@@ -81,6 +108,9 @@ public class Main {
 			e.printStackTrace();
 		}
 	}
+	/**
+	 * @param PrintTop5LeaderBoard prints the top 5 leaderboard
+	 */
 	 // print top 5 in the leaderboard
 	public static void PrintTop5LeaderBoard() {
 
@@ -99,7 +129,10 @@ public class Main {
 			e.printStackTrace();
 		}
 	}
-
+	/**
+	 * @param AdkForAnswer asks user to input their asnwer and checks its validity
+	 * @throws IOException gives an error message to the developer if something went wrong
+	 */
 	// Ask user for input and check its validity
 	public static void AskForAnswer(int CurrentTry) throws IOException {
 
@@ -162,7 +195,9 @@ public class Main {
 				CheckAnswer(answer, CurrentTry);
 		}
 	}
-
+	/**
+	 * @param IsIsogram checks if the word is isogram
+	 */
 	// checks whether the word is isogram
 	static boolean IsIsogram(String answer) {
 		// Convert the string in lower case letters
@@ -218,14 +253,19 @@ public class Main {
 		}
 		else {GameLost();}
 	}
-
+	/**
+	 * @param GameOver() informs the player that the game ended in victory and shows attained score
+	 */
 	public static void GameOver() {
 		System.out.println("Hienoa voitit pelin!");
 		Score += 100;
 		System.out.println("Pisteet: " + Score);
 		GameIsOver = true;
 	}
-
+	/**
+	 * @param	GameLost informs the player that they lost the game
+	 * @throws IOException gives an error message to the developer if something went wrong
+	 */
 	public static void GameLost() throws IOException {
 		System.out.println("Et voittanut tällä kertaa. Parempi onni ensi kerralla!");
 		PlayAgainOrNot();
@@ -241,7 +281,10 @@ public class Main {
 			AskForAnswer(CurrentTry);
 		}
 	}
-
+	/**
+	 * @param PlayAgainOrNot ask the player if they want to play again or not
+	 * @throws IOException gives an error message to the developer if something went wrong
+	 */
 	/// Ask to play again and return the answer back to do while loop
 	public static boolean PlayAgainOrNot() throws IOException {
 
@@ -259,7 +302,10 @@ public class Main {
 		}
 		return true;
 	}
-	
+	/**
+	 * @param GetRandomHiddenWord() loads the word to guess from a fixed list
+	 * 
+	 */
 	public static void GetRandomHiddenWord() 
 	{
 		String[] HiddenWords = { "koira", "torni", "marsu", "vuohi" };
@@ -276,7 +322,9 @@ public class Main {
 		GameIsOver = false;
 		
 	}
-	
+	/**
+	 * @param ChooseDifficulty() Asks the player to choose their diffuclty from 3 options
+	 */
 	public static void ChooseDifficulty() 
 	{
 		//Difficulty = 0;
