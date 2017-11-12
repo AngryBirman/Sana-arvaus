@@ -1,9 +1,12 @@
 import java.util.Arrays;
+import java.util.Random;
+import java.util.Scanner;
+import java.io.*;
 
 /**
 * Word-guessing game
 * <p>
-* This game asks the player for the words to guess. Depending on the difficulty the player has certain ammount of tries
+* This game asks the player for the words to guess. Depending on the difficulty the player has certain amount of tries
 * to get the word(s) correct. After a game the player can view their placement on the leaderboards
 * <p>
 * 
@@ -28,7 +31,8 @@ public class Main {
 	static int Difficulty;
 	
 	/**
-	 * 
+	 * @param main actually runs the game
+	 * @throws IOException gives an error message to the developer if something went wrong
 	 */
 	
 	public static void main(String[] args) throws IOException {
@@ -55,8 +59,8 @@ public class Main {
 	}
 	
 	/**
-	 * @param AskKeaderBoard() asks user to load the leaderboard
-	 * @throws IOException gives an error message to the developer if soemthing went wrong
+	 * @param AskLeaderBoard() asks user to load the leaderboard
+	 * @throws IOException gives an error message to the developer if something went wrong
 	 */
 	// ask user to load the leaderboard
 		public static void AskLeaderBoard() throws IOException {
@@ -152,7 +156,9 @@ public class Main {
 		}
 
 	}
-
+	/**
+	 * @param CheckAnswerValidity() checks that the answer is correct the length 
+	 */
 	public static void CheckAnswerValidity(String answer, int CurrentTry) throws IOException {
 		boolean testi = false; // for debugging a weird bug more info from laatikainen
 								
@@ -213,7 +219,10 @@ public class Main {
 		}
 		return false;
 	}
-
+	/**
+	 * @param CheckAnswer() chekcs that the player inputted the correct answer
+	 * @throws IOException gives an error message to the developer if something went wrong
+	 */
 	public static void CheckAnswer(String answer, int CurrentTry) throws IOException {
 
 		if (CurrentTry > 0) 
@@ -271,13 +280,16 @@ public class Main {
 		PlayAgainOrNot();
 		// System.exit(0);
 	}
-
+	/**
+	 * @param ShowHint() shows the player how many correct answer they have
+	 * @throws IOException gives an error message to the developer if something went wrong
+	 */
 	/// Prints to player whether they had bulls or cows in their answer
 	public static void ShowHint(int bulls, int cows, String answer, int CurrentTry) throws IOException 
 	{
 		if(CurrentTry > 0) 
 		{
-			System.out.println("Bulls: " + bulls + " Cows: " + cows);
+			System.out.println("Oikea kirjain, oikea j‰rjestys: " + bulls + " Oikea kirjain, v‰‰r‰ j‰rjestys: " + cows);
 			AskForAnswer(CurrentTry);
 		}
 	}
@@ -315,7 +327,9 @@ public class Main {
 		HiddenWord = HiddenWords[index];	
 		System.out.println("Sana ladattu.");
 	}
-	
+	/**
+	 * @param ResetGame() resets the game when the game ends
+	 */
 	public static void ResetGame() 
 	{
 		GetRandomHiddenWord();
@@ -323,7 +337,7 @@ public class Main {
 		
 	}
 	/**
-	 * @param ChooseDifficulty() Asks the player to choose their diffuclty from 3 options
+	 * @param ChooseDifficulty() Asks the player to choose their difficulty from 3 options
 	 */
 	public static void ChooseDifficulty() 
 	{
