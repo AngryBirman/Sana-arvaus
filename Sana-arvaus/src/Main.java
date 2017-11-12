@@ -98,7 +98,7 @@ public class Main {
 		}
 		/**
 		 * @param FullleaderBoard creates the leaderboard
-		 * @throws IOException gives an error message to the developer if soemthing went wrong 
+		 * @throws IOException gives an error message to the developer if something went wrong 
 		 */
 		// create and write the full leaderboard
 	public static void FullLeaderBoard() throws IOException {
@@ -134,7 +134,7 @@ public class Main {
 		}
 	}
 	/**
-	 * @param AdkForAnswer asks user to input their asnwer and checks its validity
+	 * @param AdkForAnswer asks user to input their answer and checks its validity
 	 * @throws IOException gives an error message to the developer if something went wrong
 	 */
 	// Ask user for input and check its validity
@@ -220,7 +220,7 @@ public class Main {
 		return false;
 	}
 	/**
-	 * @param CheckAnswer() chekcs that the player inputted the correct answer
+	 * @param CheckAnswer() Checks that the player inputted the correct answer
 	 * @throws IOException gives an error message to the developer if something went wrong
 	 */
 	public static void CheckAnswer(String answer, int CurrentTry) throws IOException {
@@ -304,7 +304,6 @@ public class Main {
 		String answer = scanner.next();
 		if (answer.matches("n")) {
 			System.out.println("N‰hd‰‰n taas!");
-			System.exit(0);
 			return false;
 		} else if (answer.matches("y")) {
 			FullLeaderBoard();
