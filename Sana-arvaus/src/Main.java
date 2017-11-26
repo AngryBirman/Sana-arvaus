@@ -356,34 +356,52 @@ public class Main {
 	/**
 	 * @param GetRandomHiddenWord()
 	 *            loads the word to guess from a fixed list
+	 * @throws IOException 
 	 * 
 	 */
-	public static void GetRandomHiddenWord() {
-		/*
-		 * String[] HiddenWords = { "koira", "torni", "marsu", "vuohi" };
-		 * 
-		 * Random RandomHiddenWord = new Random(); int index =
-		 * RandomHiddenWord.nextInt(HiddenWords.length); HiddenWord =
-		 * HiddenWords[index]; System.out.println("Sana ladattu.");
-		 */
+	public static void GetRandomHiddenWord() throws IOException {
+	
+    
+		final PrintWriter writer = new PrintWriter(new FileWriter("hiddenwords.txt", true)); // creates txt file
+		BufferedReader br = new BufferedReader(new FileReader("hiddenwords.txt")); // making reader for file
+		if (br.readLine() == null) { // if the first line in the file is empty = empty file and we can add our default words
+			writer.println("koira");
+			writer.println("marsu"); // adding default words
+			writer.println("vuohi");
+			writer.println("torni");
+		}
+		writer.close();
+		br.close();
 
-		ArrayList<String> HiddenWords = new ArrayList<String>();
-		HiddenWords.add("koira");
-		HiddenWords.add("torni");
-		HiddenWords.add("marsu");
-		HiddenWords.add("vuohi");
-
-		Random RandomHiddenWord = new Random();
-		int index = RandomHiddenWord.nextInt(HiddenWords.size());
-		HiddenWord = HiddenWords.get(index);
-		System.out.println("Sana ladattu.");
+		try 
+		{
+			Scanner s = new Scanner(new File("hiddenwords.txt")); // reading file
+			ArrayList<String> HiddenWords = new ArrayList<String>();
+			while (s.hasNext()){
+			    HiddenWords.add(s.next()); // adding words to array list
+			}
+			s.close();
+			
+			Random RandomHiddenWord = new Random();
+			int index = RandomHiddenWord.nextInt(HiddenWords.size());
+			HiddenWord = HiddenWords.get(index);
+			System.out.println("Sana ladattu.");
+			
+			}catch (FileNotFoundException e) {
+			// error log
+			System.out.println("Tapahtui virhe. Tiedostoa hiddenwords.txt ei löytynyt ");
+			e.printStackTrace();
+		}
+		
+		
 	}
 
 	/**
 	 * @param ResetGame()
 	 *            resets the game when the game ends
+	 * @throws IOException 
 	 */
-	public static void ResetGame() {
+	public static void ResetGame() throws IOException {
 		GetRandomHiddenWord();
 		GameIsOver = false;
 
