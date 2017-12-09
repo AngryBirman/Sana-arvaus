@@ -25,7 +25,7 @@ public class Main {
 
 	private static final Scanner scanner = new Scanner(System.in);
 	private static final Scanner namescanner = new Scanner(System.in);
-
+	private static final Scanner answerscanner = new Scanner(System.in);
 	static String HiddenWord = ""; // Initializing empty string
 	static String Name = ""; // name of the player
 	static int Score = 0; // global score of the player
@@ -66,6 +66,9 @@ public class Main {
 		} while (PlayAgainOrNot() == true);
 		CreateLeaderBoard();
 		AskLeaderBoard();
+		System.out.println("Paina enter n‰pp‰int‰ lopettaaksesi...");
+		System.console().readLine();
+		System.exit(0);
 	}
 
 	/**
@@ -78,15 +81,24 @@ public class Main {
 	public static void AskLeaderBoard() throws IOException {
 
 		System.out.println("Haluatko ladata tulostaulukon? y/n/5(n‰ytt‰‰ viisi ensimm‰ist‰)");
-		String BoardAnswer = scanner.next();
+		String BoardAnswer = answerscanner.next();
 		if (BoardAnswer.matches("n")) {
+			System.out.println("Paina enter n‰pp‰int‰ lopettaaksesi...");
+			System.console().readLine();
 			System.exit(0); // fix multiple runs of the game not exiting properly
 		} else if (BoardAnswer.matches("y")) {
 			PrintCreateLeaderBoard();
-			System.exit(0);
+			System.out.println("Paina enter n‰pp‰int‰ lopettaaksesi...");
+			System.console().readLine();
+			System.exit(0); 
 		} else if (BoardAnswer.matches("5")) {
 			PrintTop5LeaderBoard();
-			System.exit(0);
+			System.out.println("Paina enter n‰pp‰int‰ lopettaaksesi...");
+			System.console().readLine();
+			System.exit(0); 
+		}
+		else {
+			BoardAnswer="n";
 		}
 	}
 
@@ -312,6 +324,7 @@ public class Main {
 	 */
 	public static void GameLost() throws IOException {
 		System.out.println("Et voittanut t‰ll‰ kertaa. Parempi onni ensi kerralla!");
+		GameIsOver = true;
 		PlayAgainOrNot();
 	}
 
@@ -337,18 +350,20 @@ public class Main {
 	 */
 	/// Ask to play again and return the answer back to do while loop
 	public static boolean PlayAgainOrNot() throws IOException {
-
+		CreateLeaderBoard();
 		System.out.println(" \n Haluatko pelata uudelleen? y/n ");
-		String answer = scanner.next();
+		String answer = answerscanner.next();
 		if (answer.matches("n")) {
 			System.out.println("N‰hd‰‰n taas!");
+			AskLeaderBoard();
 			return false;
-			//System.exit(0);
 		} else if (answer.matches("y")) {
-			CreateLeaderBoard();
 			main(null);
 			// GameIsOver = false;
 			return true;
+		}
+		else {
+			answer="n";
 		}
 		return true;
 	}
@@ -385,7 +400,6 @@ public class Main {
 			Random RandomHiddenWord = new Random();
 			int index = RandomHiddenWord.nextInt(HiddenWords.size());
 			HiddenWord = HiddenWords.get(index);
-			System.out.println("Sana ladattu.");
 			
 			}catch (FileNotFoundException e) {
 			// error log
